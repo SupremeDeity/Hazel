@@ -1,14 +1,33 @@
+#include "hzpch.h"
+
 #include "Application.h"
 
-Hazel::Application::Application()
-{
-}
+#include "Hazel/Events/ApplicationEvent.h"
 
-Hazel::Application::~Application()
-{
-}
+namespace Hazel {
 
-void Hazel::Application::Run()
-{
-	while (true);
+	Application::Application()
+	{
+	}
+
+
+	Application::~Application()
+	{
+	}
+
+	void Application::Run()
+	{
+		WindowResizeEvent e(1280, 720);
+		if (e.IsInCategory(EventCategoryApplication))
+		{
+			HZ_TRACE(e);
+		}
+		if (e.IsInCategory(EventCategoryInput))
+		{
+			HZ_TRACE(e);
+		}
+
+		while (true);
+	}
+
 }

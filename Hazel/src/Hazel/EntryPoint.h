@@ -1,14 +1,19 @@
 #pragma once
 
-extern Hazel::Application* Hazel::CreateApplication();
-
 #ifdef HZ_PLATFORM_WINDOWS
 
-int main(int argc, char** argv) {
+extern Hazel::Application* Hazel::CreateApplication();
+
+int main(int argc, char** argv)
+{
+	Hazel::Log::Init();
+	HZ_CORE_WARN("Initialized Log!");
+	int a = 5;
+	HZ_INFO("Hello! Var={0}", a);
+
 	auto app = Hazel::CreateApplication();
 	app->Run();
 	delete app;
 }
-#else 
-#error HAZEL ONLY SUPPORTS WINDOWS!
-#endif // !HAZEL_PLATFORM_WINDOWS
+
+#endif

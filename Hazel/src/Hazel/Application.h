@@ -1,7 +1,10 @@
 #pragma once
+
 #include "Core.h"
+#include "Events/Event.h"
 
 namespace Hazel {
+
 	class HAZEL_API Application
 	{
 	public:
@@ -10,7 +13,8 @@ namespace Hazel {
 
 		void Run();
 	};
-	
-	// To Be Defined in CLIENT for app registeration.
-	Hazel::Application* CreateApplication();
+
+	// To be defined in CLIENT
+	Application* CreateApplication();
+
 }

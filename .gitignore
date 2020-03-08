@@ -1,9 +1,7 @@
-// Directories
+# Directories
 .vs/
-
-// bin
 bin/
-bin-int
+bin-int/
 
-// files
+# Files
 *.user
