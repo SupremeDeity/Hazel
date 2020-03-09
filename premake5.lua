@@ -9,12 +9,20 @@ workspace "Hazel"
 		"Dist"
 	}
 
+	flags {
+		"MultiProcessorCompile"
+	}
+
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
+IncludeDir["glad"] = "Hazel/vendor/glad/include"
+IncludeDir["imgui"] = "Hazel/vendor/imgui"
 
 include "Hazel/Vendor/GLFW"
+include "Hazel/Vendor/glad"
+include "Hazel/Vendor/imgui"
 
 project "Hazel"
 	location "Hazel"
@@ -34,11 +42,15 @@ project "Hazel"
 	{
 		"%{prj.name}/vendor/spdlog/include",
 		"Hazel/src",
-		"%{IncludeDir.GLFW}"
+		"%{IncludeDir.GLFW}",
+		"%{IncludeDir.glad}",
+		"%{IncludeDir.imgui}"
 	}
 
 	links {
 		"GLFW",
+		"glad",
+		"imgui",
 		"opengl32.lib"
 	}
 
@@ -53,19 +65,24 @@ project "Hazel"
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS",
-			"HZ_BUILD_DLL"
+			"HZ_BUILD_DLL",
+			"GLFW_INCLUDE_NONE"
 		}
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
+		defines "HZ_ENABLE_ASSERTS"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
+		runtime "Release"
 		optimize "On"
 
 project "Sandbox"
@@ -110,12 +127,15 @@ project "Sandbox"
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
+		runtime "Debug"
 		symbols "On"
 
 	filter "configurations:Release"
 		defines "HZ_RELEASE"
+		runtime "Release"
 		optimize "On"
 
 	filter "configurations:Dist"
 		defines "HZ_DIST"
+		runtime "Release"
 		optimize "On"

@@ -1,11 +1,10 @@
 #pragma once
 
-// C++ Standard includes
 #include <iostream>
-#include <functional>
-#include <utility>
 #include <memory>
+#include <utility>
 #include <algorithm>
+#include <functional>
 
 #include <string>
 #include <sstream>
@@ -13,11 +12,8 @@
 #include <unordered_map>
 #include <unordered_set>
 
-// Hazel Custom Files
-#include <Hazel\Log.h>
+#include "Hazel/Log.h"
 
-// Platform Specific Includes
 #ifdef HZ_PLATFORM_WINDOWS
-#include <Windows.h>
+	#include <Windows.h>
 #endif
-
