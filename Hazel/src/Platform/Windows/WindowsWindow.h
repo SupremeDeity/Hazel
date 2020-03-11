@@ -17,6 +17,8 @@ namespace Hazel {
 		inline unsigned int GetWidth() const override { return m_Data.Width; }
 		inline unsigned int GetHeight() const override { return m_Data.Height; }
 
+		inline virtual void* GetNativeWindow() override { return m_Window; };
+
 		// Window attributes
 
 		/* We basically have a reference to OnEvent(_placeholder) stored here. which has the format void OnEvent(Event& event)
