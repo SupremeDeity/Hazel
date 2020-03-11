@@ -20,14 +20,19 @@ IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
 IncludeDir["glad"] = "Hazel/vendor/glad/include"
 IncludeDir["imgui"] = "Hazel/vendor/imgui"
 
+group "Dependencies"
+
 include "Hazel/Vendor/GLFW"
 include "Hazel/Vendor/glad"
 include "Hazel/Vendor/imgui"
+
+group ""
 
 project "Hazel"
 	location "Hazel"
 	kind "SharedLib"
 	language "C++"
+	staticruntime "off"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -57,9 +62,14 @@ project "Hazel"
 	pchheader "hzpch.h"
 	pchsource "Hazel/src/hzpch.cpp"
 
+	postbuildcommands
+	{
+		("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+	}
+
+
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
 		systemversion "latest"
 
 		defines
@@ -112,17 +122,12 @@ project "Sandbox"
 
 	filter "system:windows"
 		cppdialect "C++17"
-		staticruntime "On"
+		staticruntime "off"
 		systemversion "latest"
 
 		defines
 		{
 			"HZ_PLATFORM_WINDOWS"
-		}
-
-		postbuildcommands
-		{
-			("{COPY} ../bin/" .. outputdir .. "/Hazel/Hazel.dll ../bin/" .. outputdir .. "/Sandbox")
 		}
 
 	filter "configurations:Debug"
