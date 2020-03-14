@@ -64,7 +64,7 @@ namespace Hazel {
 	
 		)";
 
-		m_Shader.reset(new Shader(vertexSrc, fragmentSrc));
+		m_Shader.reset(Shader::Create("../Hazel/res/Shaders/vertex.shader", "../Hazel/res/Shaders/fragment.shader"));
 	}
 
 	Application::~Application()
