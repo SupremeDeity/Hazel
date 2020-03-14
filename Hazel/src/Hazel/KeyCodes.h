@@ -123,5 +123,3 @@
 #define HZ_KEY_RIGHT_ALT          346
 #define HZ_KEY_RIGHT_SUPER        347
 #define HZ_KEY_MENU               348
-
-#define HZ_KEY_LAST               HZ_KEY_MENU

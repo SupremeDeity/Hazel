@@ -29,7 +29,6 @@ namespace Hazel {
 		EventCategoryMouseButton    = BIT(4)
 	};
 
-/* ## Copy Pastes the parameter, # Turns the Parameter Provided to a string so EVENT_CLASS_TYPE(WindowClose) would become WindowClose */
 #define EVENT_CLASS_TYPE(type) static EventType GetStaticType() { return EventType::##type; }\
 								virtual EventType GetEventType() const override { return GetStaticType(); }\
 								virtual const char* GetName() const override { return #type; }
@@ -80,5 +79,6 @@ namespace Hazel {
 	{
 		return os << e.ToString();
 	}
+
 }
 

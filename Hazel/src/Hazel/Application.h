@@ -1,11 +1,13 @@
 #pragma once
 
-#include "Hazel/Core.h"
+#include "Core.h"
+
+#include "Window.h"
+#include "Hazel/LayerStack.h"
 #include "Hazel/Events/Event.h"
 #include "Hazel/Events/ApplicationEvent.h"
-#include "Hazel/Layer.h"
-#include "Hazel/LayerStack.h"
-#include "Hazel/Window.h"
+#include "Hazel\Renderer\Shader.h"
+#include "Hazel/ImGui/ImGuiLayer.h"
 
 namespace Hazel {
 
@@ -22,18 +24,22 @@ namespace Hazel {
 		void PushLayer(Layer* layer);
 		void PushOverlay(Layer* layer);
 
-		inline static Application& Get() { return *m_Instance; }
 		inline Window& GetWindow() { return *m_Window; }
 
-
+		inline static Application& Get() { return *s_Instance; }
 	private:
 		bool OnWindowClose(WindowCloseEvent& e);
+		bool OnKeyPress(KeyPressedEvent& e);
 
 		std::unique_ptr<Window> m_Window;
+		ImGuiLayer* m_ImGuiLayer;
 		bool m_Running = true;
 		LayerStack m_LayerStack;
+	private:
+		static Application* s_Instance;
 
-		static Application* m_Instance;
+		unsigned int m_VertexArray, m_VertexBuffer, m_IndexBuffer;
+		std::unique_ptr<Shader> m_Shader;
 
 	};
 

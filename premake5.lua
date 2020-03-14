@@ -1,7 +1,7 @@
 workspace "Hazel"
 	architecture "x64"
 	startproject "Sandbox"
-	
+
 	configurations
 	{
 		"Debug",
@@ -9,71 +9,66 @@ workspace "Hazel"
 		"Dist"
 	}
 
-	flags {
-		"MultiProcessorCompile"
-	}
-
 outputdir = "%{cfg.buildcfg}-%{cfg.system}-%{cfg.architecture}"
 
+-- Include directories relative to root folder (solution directory)
 IncludeDir = {}
 IncludeDir["GLFW"] = "Hazel/vendor/GLFW/include"
-IncludeDir["glad"] = "Hazel/vendor/glad/include"
-IncludeDir["imgui"] = "Hazel/vendor/imgui"
+IncludeDir["Glad"] = "Hazel/vendor/Glad/include"
+IncludeDir["ImGui"] = "Hazel/vendor/imgui"
 IncludeDir["glm"] = "Hazel/vendor/glm"
 
 group "Dependencies"
-
-include "Hazel/Vendor/GLFW"
-include "Hazel/Vendor/glad"
-include "Hazel/Vendor/imgui"
-
+include "Hazel/vendor/GLFW"
+include "Hazel/vendor/Glad"
+include "Hazel/vendor/imgui"
 group ""
 
 project "Hazel"
 	location "Hazel"
-	kind "SharedLib"
+	kind "StaticLib"
 	language "C++"
-	staticruntime "off"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
+
+	pchheader "hzpch.h"
+	pchsource "Hazel/src/hzpch.cpp"
 
 	files
 	{
 		"%{prj.name}/src/**.h",
 		"%{prj.name}/src/**.cpp",
 		"%{prj.name}/vendor/glm/glm/**.hpp",
-		"%{prj.name}/vendor/glm/glm/**.inl"
+		"%{prj.name}/vendor/glm/glm/**.inl",
 	}
 
 	includedirs
 	{
+		"%{prj.name}/src",
 		"%{prj.name}/vendor/spdlog/include",
-		"Hazel/src",
 		"%{IncludeDir.GLFW}",
-		"%{IncludeDir.glad}",
-		"%{IncludeDir.imgui}",
+		"%{IncludeDir.Glad}",
+		"%{IncludeDir.ImGui}",
 		"%{IncludeDir.glm}"
 	}
 
-	links {
+	links 
+	{ 
 		"GLFW",
-		"glad",
-		"imgui",
+		"Glad",
+		"ImGui",
 		"opengl32.lib"
 	}
-
-	pchheader "hzpch.h"
-	pchsource "Hazel/src/hzpch.cpp"
-
-	postbuildcommands
+	
+	defines 
 	{
-		("{COPY} %{cfg.buildtarget.relpath} \"../bin/" .. outputdir .. "/Sandbox/\"")
+		"_CRT_SECURE_NO_WARNINGS"
 	}
 
-
 	filter "system:windows"
-		cppdialect "C++17"
 		systemversion "latest"
 
 		defines
@@ -85,7 +80,6 @@ project "Hazel"
 
 	filter "configurations:Debug"
 		defines "HZ_DEBUG"
-		defines "HZ_ENABLE_ASSERTS"
 		runtime "Debug"
 		symbols "On"
 
@@ -103,6 +97,8 @@ project "Sandbox"
 	location "Sandbox"
 	kind "ConsoleApp"
 	language "C++"
+	cppdialect "C++17"
+	staticruntime "on"
 
 	targetdir ("bin/" .. outputdir .. "/%{prj.name}")
 	objdir ("bin-int/" .. outputdir .. "/%{prj.name}")
@@ -117,7 +113,8 @@ project "Sandbox"
 	{
 		"Hazel/vendor/spdlog/include",
 		"Hazel/src",
-		"Hazel/vendor/glm"
+		"Hazel/vendor",
+		"%{IncludeDir.glm}"
 	}
 
 	links
@@ -126,8 +123,6 @@ project "Sandbox"
 	}
 
 	filter "system:windows"
-		cppdialect "C++17"
-		staticruntime "off"
 		systemversion "latest"
 
 		defines

@@ -11,7 +11,6 @@
 #include <vector>
 #include <unordered_map>
 #include <unordered_set>
-#include <tuple>
 
 #include "Hazel/Log.h"
 
