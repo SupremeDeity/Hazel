@@ -1,6 +1,7 @@
 #include "hzpch.h"
 #include "OpenGLShader.h"
 #include <glad\glad.h>
+#include <glm\gtc\type_ptr.hpp>
 
 namespace Hazel {
 	OpenGLShader::OpenGLShader(const std::string & vertexSrc, const std::string & fragmentSrc)
@@ -61,6 +62,11 @@ namespace Hazel {
 	void OpenGLShader::Unbind() const
 	{
 		glUseProgram(0);
+	}
+
+	void OpenGLShader::UploadMat4f(const char* name, const glm::mat4& vec)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_RendererID, name), 1, GL_FALSE, glm::value_ptr(vec));
 	}
 
 	unsigned int OpenGLShader::CreateShader(unsigned int Type, const std::string & src)
