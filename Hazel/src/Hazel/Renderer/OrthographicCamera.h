@@ -11,14 +11,14 @@ namespace Hazel
 		OrthographicCamera(float left, float right, float bottom, float top);
 
 		inline const glm::mat4& GetViewMatrix() const { return m_ViewMatrix; }
-		inline const glm::mat4& GetProjectionMatrix() const { return m_ProjectionMatrix; }
+		inline const glm::mat4& GetProjectionMatrix() const {return m_ProjectionMatrix;}
 		inline const glm::mat4& GetProjectionViewMatrix() const { return m_ProjectionViewMatrix; }
 
 		inline const glm::vec3& GetPosition() { return m_Position; }
-		inline void SetPosition(glm::vec3& position) { m_Position = position; }
+		inline void SetPosition(glm::vec3& position){m_Position = position; RecalculateViewMatrix();}
 
 		inline const float GetRotation() { return m_Rotation; }
-		inline void SetRotation(float rotation) { m_Rotation = rotation; }
+		inline void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix();}
 
 	private:
 		void RecalculateViewMatrix();
