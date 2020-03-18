@@ -64,10 +64,41 @@ namespace Hazel {
 		glUseProgram(0);
 	}
 
-	void OpenGLShader::UploadMat4f(const char* name, const glm::mat4& vec)
+	void OpenGLShader::UploadUniformInt(const char * name, int value)
 	{
-		glUniformMatrix4fv(glGetUniformLocation(m_RendererID, name), 1, GL_FALSE, glm::value_ptr(vec));
+		glUniform1i(glGetUniformLocation(m_RendererID, name), value);
 	}
+
+	void OpenGLShader::UploadUniformFloat(const char * name, float value)
+	{
+		glUniform1f(glGetUniformLocation(m_RendererID, name), value);
+	}
+
+	void OpenGLShader::UploadUniformFloat2(const char * name, const glm::vec2 & vec)
+	{
+		glUniform2fv(glGetUniformLocation(m_RendererID, name), 1, glm::value_ptr(vec));
+	}
+
+	void OpenGLShader::UploadUniformFloat3(const char * name, const glm::vec3 & vec)
+	{
+		glUniform3fv(glGetUniformLocation(m_RendererID, name), 1, glm::value_ptr(vec));
+	}
+
+	void OpenGLShader::UploadUniformFloat4(const char * name, const glm::vec4 & vec)
+	{
+		glUniform4fv(glGetUniformLocation(m_RendererID, name), 1, glm::value_ptr(vec));
+	}
+
+	void OpenGLShader::UploadUniformMat3(const char * name, const glm::mat3 & mat)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_RendererID, name), 1, GL_FALSE, glm::value_ptr(mat));
+	}
+
+	void OpenGLShader::UploadUniformMat4(const char * name, const glm::mat4 & mat)
+	{
+		glUniformMatrix4fv(glGetUniformLocation(m_RendererID, name), 1, GL_FALSE, glm::value_ptr(mat));
+	}
+
 
 	unsigned int OpenGLShader::CreateShader(unsigned int Type, const std::string & src)
 	{

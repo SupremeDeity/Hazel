@@ -12,7 +12,16 @@ namespace Hazel {
 		// Inherited via Shader
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
-		virtual void UploadMat4f(const char* name, const glm::mat4& vec) override;
+
+		void UploadUniformInt(const char* name, int value);
+
+		void UploadUniformFloat(const char* name, float value);
+		void UploadUniformFloat2(const char* name, const glm::vec2& vec);
+		void UploadUniformFloat3(const char* name, const glm::vec3& vec);
+		void UploadUniformFloat4(const char* name, const glm::vec4& vec);
+
+		void UploadUniformMat3(const char* name, const glm::mat3& mat);
+		void UploadUniformMat4(const char* name, const glm::mat4& mat);
 	
 	private:
 		uint32_t m_RendererID;

@@ -10,6 +10,6 @@ namespace Hazel
 		// Inherited via RendererAPI
 		virtual void Clear() override;
 		virtual void ClearColor(glm::vec4 color) override;
-		virtual void DrawIndexed(const std::shared_ptr<VertexArray>& vertexArray) override;
+		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
 	};
 }
