@@ -1,31 +1,41 @@
 #pragma once
 
-#include "Hazel\Renderer\Shader.h"
-#include <glm\glm.hpp>
+#include "Hazel/Renderer/Shader.h"
+#include <glm/glm.hpp>
+
+// TODO: REMOVE!
+typedef unsigned int GLenum;
 
 namespace Hazel {
-	class OpenGLShader : public Shader {
-	public:
-		OpenGLShader(const std::string& vertexSrc, const std::string& fragmentSrc);
-		~OpenGLShader();
 
-		// Inherited via Shader
+	class OpenGLShader : public Shader
+	{
+	public:
+		OpenGLShader(const std::string& filepath);
+		OpenGLShader(const std::string& name, const std::string& vertexSrc, const std::string& fragmentSrc);
+		virtual ~OpenGLShader();
+
 		virtual void Bind() const override;
 		virtual void Unbind() const override;
 
-		void UploadUniformInt(const char* name, int value);
+		virtual const std::string& GetName() const override { return m_Name; }
 
-		void UploadUniformFloat(const char* name, float value);
-		void UploadUniformFloat2(const char* name, const glm::vec2& vec);
-		void UploadUniformFloat3(const char* name, const glm::vec3& vec);
-		void UploadUniformFloat4(const char* name, const glm::vec4& vec);
+		void UploadUniformInt(const std::string& name, int value);
 
-		void UploadUniformMat3(const char* name, const glm::mat3& mat);
-		void UploadUniformMat4(const char* name, const glm::mat4& mat);
-	
+		void UploadUniformFloat(const std::string& name, float value);
+		void UploadUniformFloat2(const std::string& name, const glm::vec2& value);
+		void UploadUniformFloat3(const std::string& name, const glm::vec3& value);
+		void UploadUniformFloat4(const std::string& name, const glm::vec4& value);
+
+		void UploadUniformMat3(const std::string& name, const glm::mat3& matrix);
+		void UploadUniformMat4(const std::string& name, const glm::mat4& matrix);
+	private:
+		std::string ReadFile(const std::string& filepath);
+		std::unordered_map<GLenum, std::string> PreProcess(const std::string& source);
+		void Compile(const std::unordered_map<GLenum, std::string>& shaderSources);
 	private:
 		uint32_t m_RendererID;
-	private:
-		unsigned int CreateShader(unsigned int Type, const std::string & src);
+		std::string m_Name;
 	};
+
 }

@@ -10,11 +10,12 @@ namespace Hazel
 	public:
 		enum API
 		{
-			NONE = 0, OPENGL = 1
+			None = 0, OpenGL = 1
 		};
 
 		inline static API& GetAPI() { return s_API; }
 
+		virtual void Init() = 0;
 		virtual void Clear() = 0;
 		virtual void ClearColor(glm::vec4 color) = 0;
 

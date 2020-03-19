@@ -8,6 +8,7 @@ namespace Hazel
 	class OpenGLRendererAPI : public RendererAPI
 	{
 		// Inherited via RendererAPI
+		virtual void Init() override;
 		virtual void Clear() override;
 		virtual void ClearColor(glm::vec4 color) override;
 		virtual void DrawIndexed(const Ref<VertexArray>& vertexArray) override;
