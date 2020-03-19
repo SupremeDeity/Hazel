@@ -20,6 +20,8 @@ namespace Hazel
 		inline const float GetRotation() { return m_Rotation; }
 		inline void SetRotation(float rotation) { m_Rotation = rotation; RecalculateViewMatrix();}
 
+		void OrthographicCamera::SetProjection(float left, float right, float bottom, float top);
+
 	private:
 		void RecalculateViewMatrix();
 	private:
