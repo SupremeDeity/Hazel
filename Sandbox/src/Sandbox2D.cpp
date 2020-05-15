@@ -4,6 +4,27 @@
 #include <glm/gtc/matrix_transform.hpp>
 #include <glm/gtc/type_ptr.hpp>
 
+const char* Map =
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+"wwwwwwwwwwwwwwwwwwggggggggwwwwwwwwwwwwwwwwwww"
+"wwwwwwwwwwgggggggggggggggggggggggwwwwwwwwwwww"
+"wwwwwwwwwwwwgggggggggggggggggggggwwwwwwwwwwww"
+"wwwwwwwwwwwggggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwwwwggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwwwwggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwgggggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwgggggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwwggggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwwggggggggggggggggggggggggggwwwwwwww"
+"wwwwwwwwwwggggggggggggggggggggggggggggggwwwww"
+"wwwwwwwwwwggggggggggggggggggggggggggggggwwwww"
+"wwwwwwwwgggggggggggwwwggggwwwwggggggggggwwwww"
+"wwwwwwwggggggggggggwwwggggwwwwggggwwwwwwwwwww"
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww"
+"wwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwwww";
+
 Sandbox2D::Sandbox2D()
 	: Layer("Sandbox2D"), m_CameraController(1280.0f / 720.0f), m_SquareColor({ 0.2f, 0.3f, 0.8f, 1.0f })
 {
@@ -14,6 +35,15 @@ void Sandbox2D::OnAttach()
 	HZ_PROFILE_FUNCTION();
 
 	m_CheckerboardTexture = Hazel::Texture2D::Create("assets/textures/Checkerboard.png");
+	m_Spritesheet = Hazel::Texture2D::Create("assets/textures/Game/Spritesheet.png");
+
+	m_TileMap['w'] = Hazel::SubTexture2D::CreateFromCoords(m_Spritesheet, { 11, 11 }, { 128, 128 });
+	m_TileMap['g'] = Hazel::SubTexture2D::CreateFromCoords(m_Spritesheet, { 1, 11 }, { 128, 128 });
+	m_TileMap['e'] = Hazel::SubTexture2D::CreateFromCoords(m_Spritesheet, { 4, 5 }, { 128, 128 });
+
+	MapWidth = 45;
+	MapHeight = strlen(Map) / MapWidth;
+
 }
 
 void Sandbox2D::OnDetach()
@@ -36,6 +66,7 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		Hazel::RenderCommand::Clear();
 	}
 
+	#if 0
 	{
 		static float rotation = 0.0f;
 		rotation += ts * 50.0f;
@@ -60,6 +91,24 @@ void Sandbox2D::OnUpdate(Hazel::Timestep ts)
 		}
 		Hazel::Renderer2D::EndScene();
 	}
+	#endif
+	
+	Hazel::Renderer2D::BeginScene(m_CameraController.GetCamera());
+	for (int y = 0; y < MapHeight; y++) {
+		for (int x = 0; x < MapWidth; x++) {
+			char TileType = Map[x + y * MapWidth];
+			Hazel::Ref<Hazel::SubTexture2D> texture;
+			if (m_TileMap.find(TileType) != m_TileMap.end())
+				texture = m_TileMap[TileType];
+			else
+				texture = m_TileMap['e'];
+
+				Hazel::Renderer2D::DrawQuad({ x, -y, -0.1 }, { 1.0, 1.0 }, texture);
+		}
+	}
+	
+	Hazel::Renderer2D::EndScene();
+	
 }
 
 void Sandbox2D::OnImGuiRender()
