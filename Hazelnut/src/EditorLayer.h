@@ -18,6 +18,7 @@ namespace Hazel {
 		void OnEvent(Event& e) override;
 	private:
 		Hazel::OrthographicCameraController m_CameraController;
+		bool isViewportFocused = false, isViewportHovered = false;
 
 		// Temp
 		Ref<VertexArray> m_SquareVA;
