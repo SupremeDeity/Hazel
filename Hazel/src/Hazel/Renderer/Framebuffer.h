@@ -11,6 +11,7 @@ namespace Hazel {
 
 	class Framebuffer {
 	public:
+		virtual ~Framebuffer() = default;
 		static Ref<Framebuffer> Create(const FramebufferSpecification& spec);
 
 		virtual const FramebufferSpecification GetFramebufferSpecification() const = 0;

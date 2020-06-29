@@ -9,7 +9,7 @@ namespace Hazel {
 	{
 	public:
 		Hazelnut()
-			: Application("Hazel Editor")
+			: Application("Hazelnut")
 		{
 			PushLayer(new EditorLayer());
 		}
