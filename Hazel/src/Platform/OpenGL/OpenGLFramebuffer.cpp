@@ -1,22 +1,29 @@
 #include "hzpch.h"
 #include "OpenGLFramebuffer.h"
-#include <glad\glad.h>
+
+#include <glad/glad.h>
 
 namespace Hazel {
-	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification & spec)
+
+	static const uint32_t s_MaxFramebufferSize = 8192;
+
+	OpenGLFramebuffer::OpenGLFramebuffer(const FramebufferSpecification& spec)
 		: m_Specification(spec)
 	{
 		Invalidate();
 	}
+
 	OpenGLFramebuffer::~OpenGLFramebuffer()
 	{
 		glDeleteFramebuffers(1, &m_RendererID);
 		glDeleteTextures(1, &m_ColorAttachment);
 		glDeleteTextures(1, &m_DepthAttachment);
 	}
+
 	void OpenGLFramebuffer::Invalidate()
 	{
-		if (m_RendererID) {
+		if (m_RendererID)
+		{
 			glDeleteFramebuffers(1, &m_RendererID);
 			glDeleteTextures(1, &m_ColorAttachment);
 			glDeleteTextures(1, &m_DepthAttachment);
@@ -37,18 +44,10 @@ namespace Hazel {
 		glBindTexture(GL_TEXTURE_2D, m_DepthAttachment);
 		glTexImage2D(GL_TEXTURE_2D, 0, GL_DEPTH24_STENCIL8, m_Specification.Width, m_Specification.Height, 0, GL_DEPTH_STENCIL, GL_UNSIGNED_INT_24_8, NULL);
 		glFramebufferTexture2D(GL_FRAMEBUFFER, GL_DEPTH_STENCIL_ATTACHMENT, GL_TEXTURE_2D, m_DepthAttachment, 0);
-		
+
 		HZ_CORE_ASSERT(glCheckFramebufferStatus(GL_FRAMEBUFFER) == GL_FRAMEBUFFER_COMPLETE, "Framebuffer is incomplete!");
 
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
-	}
-
-	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
-	{
-		m_Specification.Width = width;
-		m_Specification.Height = height;
-
-		Invalidate();
 	}
 
 	void OpenGLFramebuffer::Bind()
@@ -56,8 +55,23 @@ namespace Hazel {
 		glBindFramebuffer(GL_FRAMEBUFFER, m_RendererID);
 		glViewport(0, 0, m_Specification.Width, m_Specification.Height);
 	}
+
 	void OpenGLFramebuffer::Unbind()
 	{
 		glBindFramebuffer(GL_FRAMEBUFFER, 0);
 	}
+
+	void OpenGLFramebuffer::Resize(uint32_t width, uint32_t height)
+	{
+		if (width == 0 || height == 0 || width > s_MaxFramebufferSize || height > s_MaxFramebufferSize)
+		{
+			HZ_CORE_WARN("Attempted to rezize framebuffer to {0}, {1}", width, height);
+			return;
+		}
+		m_Specification.Width = width;
+		m_Specification.Height = height;
+
+		Invalidate();
+	}
+
 }
